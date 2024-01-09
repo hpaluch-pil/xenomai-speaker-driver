@@ -17,7 +17,7 @@
 
 #define DEVICE_NAME "/dev/rtdm/xenospkr0"
 
-#define SLEEP_S 3
+#define SLEEP_S 10 
 
 int main(int argc, char **argv)
 {
