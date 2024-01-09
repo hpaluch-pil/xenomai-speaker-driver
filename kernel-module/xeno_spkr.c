@@ -40,6 +40,7 @@ struct spkr_priv {
 	unsigned int configured;
 	unsigned long period;
 	unsigned long ticks;
+	unsigned int count;
 };
 
 
@@ -48,6 +49,18 @@ static void spkr_handle_base_timer(rtdm_timer_t *timer)
 	struct spkr_priv *ctx = container_of(timer, struct spkr_priv, base_timer);
 
 	ctx->ticks++;
+
+	ctx->spkr_data ^= 3;
+
+	// from kernel/sound/drivers/pcsp/pcsp_input.c
+
+	if (ctx->spkr_data){
+		/* enable counter 2 */
+	    outb_p(inb_p(0x61) | 3, 0x61);
+	} else {
+		/* disable counter 2 */
+        outb(inb_p(0x61) & 0xFC, 0x61);
+	}
 
 	prx_debug("Timer tick #%lu", ctx->ticks);
 }
@@ -62,6 +75,8 @@ static int spkr_open(struct rtdm_fd *fd, int oflags)
 	ctx->configured = 0;
 	ctx->period = 1000000000UL;
 	ctx->ticks = 0;
+	ctx->spkr_data = 0;
+	ctx->count=500;
 
 	ret = rtdm_timer_init(&ctx->base_timer, spkr_handle_base_timer, "spkr_timer");
 	if (ret < 0){
@@ -76,6 +91,12 @@ static int spkr_open(struct rtdm_fd *fd, int oflags)
 		rtdm_timer_destroy(&ctx->base_timer);
 		goto exit1;
 	}
+
+    /* set command for counter 2, 2 byte write */
+    outb_p(0xB6, 0x43);
+    /* select desired HZ */
+    outb_p(ctx->count & 0xff, 0x42);
+    outb((ctx->count >> 8) & 0xff, 0x42);
 
 	ctx->configured = 1;
 exit1:
@@ -92,6 +113,8 @@ static void spkr_close(struct rtdm_fd *fd)
 		return;
 
 	rtdm_timer_destroy(&ctx->base_timer);
+	/* disable counter 2 */
+    outb(inb_p(0x61) & 0xFC, 0x61);
 }
 
 
