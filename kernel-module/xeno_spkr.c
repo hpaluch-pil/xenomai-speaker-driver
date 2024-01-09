@@ -57,7 +57,7 @@ static int spkr_open(struct rtdm_fd *fd, int oflags)
 	int ret = 0;
 	struct spkr_priv *ctx = rtdm_fd_to_private(fd);
 
-	pr_debug("called");
+	prx_debug("called");
 
 	ctx->configured = 0;
 	ctx->period = 1000000000UL;
@@ -96,7 +96,7 @@ static void spkr_close(struct rtdm_fd *fd)
 
 
 static struct rtdm_driver spkr_driver = {
-	.profile_info           = RTDM_PROFILE_INFO(spkr,
+	.profile_info           = RTDM_PROFILE_INFO(xenospkr,
 						    RTDM_CLASS_EXPERIMENTAL,
 						    RTDM_SUBCLASS_GENERIC,
 						    SPKR_PROFILE_VER),
