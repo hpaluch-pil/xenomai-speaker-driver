@@ -62,7 +62,7 @@ static void spkr_handle_base_timer(rtdm_timer_t *timer)
         outb(inb_p(0x61) & 0xFC, 0x61);
 	}
 
-	prx_debug("Timer tick #%lu", ctx->ticks);
+	prx_debug("Timer tick #%lu, speaker is %s", ctx->ticks, ctx->spkr_data ? "ON" : "OFF" );
 }
 
 static int spkr_open(struct rtdm_fd *fd, int oflags)
