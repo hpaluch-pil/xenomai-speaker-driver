@@ -22,10 +22,10 @@ MODULE_LICENSE("GPL");
 
 static int __init __spkr_init(void)
 {
-        int ret = 0;
+	int ret = 0;
 
-	rtdm_printk("%s:%d called\n", __func__,__LINE__);
-        return ret;
+	rtdm_printk("%s:%d called\n", __func__, __LINE__);
+	return ret;
 }
 
 
