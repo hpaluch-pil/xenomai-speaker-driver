@@ -1,0 +1,16 @@
+# vim files
+*.swp
+*~
+# failed patch files
+*.orig
+*.rej
+# build files
+*.o
+*.ko
+*.o.cmd
+*.ko.cmd
+*.mod.cmd
+*.mod.c
+*.mod
+Module.symvers
+modules.order
