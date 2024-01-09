@@ -12,5 +12,6 @@
 *.mod.cmd
 *.mod.c
 *.mod
+*.cmd
 Module.symvers
 modules.order
