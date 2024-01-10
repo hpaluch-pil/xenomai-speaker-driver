@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cdtprojectproperties>
+  <section name="org.eclipse.cdt.internal.ui.wizards.settingswizards.IncludePaths">
+    <language id="org.eclipse.cdt.core.gcc" name="C Source File">
+      <includepath>/usr/include/xenomai/cobalt</includepath>
+      <includepath>/usr/include/xenomai</includepath>
+    </language>
+    <language name="Object File"/>
+    <language id="org.eclipse.cdt.core.assembly" name="Assembly Source File">
+      <includepath>/usr/include/xenomai/cobalt</includepath>
+      <includepath>/usr/include/xenomai</includepath>
+    </language>
+  </section>
+  <section name="org.eclipse.cdt.internal.ui.wizards.settingswizards.Macros">
+    <language id="org.eclipse.cdt.core.gcc" name="C Source File">
+      <macro>
+        <name>__COBALT__</name>
+        <value/>
+      </macro>
+      <macro>
+        <name>__COBALT_WRAP__</name>
+        <value/>
+      </macro>
+      <macro>
+        <name>_GNU_SOURCE</name>
+        <value/>
+      </macro>
+      <macro>
+        <name>_REENTRANT</name>
+        <value/>
+      </macro>
+    </language>
+    <language name="Object File"/>
+    <language id="org.eclipse.cdt.core.assembly" name="Assembly Source File"/>
+  </section>
+</cdtprojectproperties>
