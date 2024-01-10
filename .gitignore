@@ -16,5 +16,5 @@
 Module.symvers
 modules.order
 # application binary
-xeno-app/spkr-app
+spkr-app/spkr-app
 

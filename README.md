@@ -56,7 +56,7 @@ dmesg
 
 Now build and run application:
 ```shell
-cd xeno-app
+cd spkr-app
 make
 ./spkr-app
 ```
