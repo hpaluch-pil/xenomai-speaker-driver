@@ -16,9 +16,14 @@ Tested version:
   - when you unpack `eci-release.tar.gz` there is Debian 11 repository
     under `eci-release/targets/packages/bullseye/eci-bullseye` - it was published
     on Interanet and installed on top of existing Debian 11
+  - you have follow instructions on: https://eci.intel.com/docs/3.1/getstarted/installing_packages.html
   - at least these Debian 11 packages should be installed:
     ```shell
-    sudo apt-get install eci-xenomai
+    sudo apt install -y eci-customizations
+    sudo apt-get reinstall '(firmware-linux-nonfree|linux-firmware$)'
+    sudo apt install -y linux-intel-rt linux-image-intel-xenomai
+    sudo apt install -y eci-xenomai
+    sudo update-grub
     ```
   - you need to reboot system and ensure that Dovetail kernel version
     is booted, in my example `5.10.179-intel-ese-standard-lts-dovetail+`
