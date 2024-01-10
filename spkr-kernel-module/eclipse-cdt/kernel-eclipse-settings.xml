@@ -2,6 +2,7 @@
 <cdtprojectproperties>
   <section name="org.eclipse.cdt.internal.ui.wizards.settingswizards.IncludePaths">
     <language id="org.eclipse.cdt.core.gcc" name="C Source File">
+      <includepath>${KDIR}/include/xenomai</includepath>
       <includepath>${KDIR}/include</includepath>
       <includepath>${KDIR}/include/uapi</includepath>
       <includepath>${KDIR}/arch/x86/include/generated/uapi</includepath>
@@ -18,6 +19,7 @@
       <includepath>${KDIR}/arch/x86/include</includepath>
       <includepath>${KDIR}/arch/x86/include/uapi</includepath>
       <includepath>${KDIR}/include/generated/uapi</includepath>
+      <includepath>${KDIR}/include/xenomai</includepath>
     </language>
   </section>
   <section name="org.eclipse.cdt.internal.ui.wizards.settingswizards.Macros">

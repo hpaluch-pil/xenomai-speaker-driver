@@ -10,11 +10,7 @@ endif
 else
 # here are options when make invoked directly
 KDIR := /lib/modules/$(shell uname -r)/build 
-
-ifeq ($(debug),1)
-# enable pr_debug() output - from: https://stackoverflow.com/a/28941476
-CFLAGS_xeno_spkr.o := -DDEBUG
-endif
+debug ?= 0
 endif
 
 EXTRA_CFLAGS += -I/usr/include/xenomai
