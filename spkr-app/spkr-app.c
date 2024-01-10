@@ -22,6 +22,9 @@
 
 #define DEVICE_NAME "/dev/rtdm/xenospkr0"
 
+#define SPKR_APP_NAME "spkr-app"
+#define SPKR_APP_VERSION 100 // 100 = 1.00
+
 // sleep 0.5 s
 #define SLEEP_US 500000
 
@@ -33,6 +36,7 @@ int main(int argc, char **argv)
 	int i;
 	unsigned int pitch = 1000;
 
+	printf("%s Version %d.%02d\n", SPKR_APP_NAME, SPKR_APP_VERSION/100, SPKR_APP_VERSION%100);
 	rt_printf("Xenomai build Runtime Version: %s!\n", XENO_VERSION_STRING);
 	fd = open(DEVICE_NAME, O_RDWR);
 	if (fd < 0){
