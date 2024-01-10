@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cdtprojectproperties>
+  <section name="org.eclipse.cdt.internal.ui.wizards.settingswizards.IncludePaths">
+    <language id="org.eclipse.cdt.core.gcc" name="C Source File">
+      <includepath>${KDIR}/include</includepath>
+      <includepath>${KDIR}/include/uapi</includepath>
+      <includepath>${KDIR}/arch/x86/include/generated/uapi</includepath>
+      <includepath>${KDIR}/arch/x86/include</includepath>
+      <includepath>${KDIR}/arch/x86/include/uapi</includepath>
+      <includepath>${KDIR}/include/generated/uapi</includepath>
+      <includepath>${XENOMAI_SOURCE}/include/cobalt/kernel</includepath>
+    </language>
+    <language name="Object File"/>
+    <language id="org.eclipse.cdt.core.assembly" name="Assembly Source File">
+      <includepath>${KDIR}/include</includepath>
+      <includepath>${KDIR}/include/uapi</includepath>
+      <includepath>${KDIR}/arch/x86/include/generated/uapi</includepath>
+      <includepath>${KDIR}/arch/x86/include</includepath>
+      <includepath>${KDIR}/arch/x86/include/uapi</includepath>
+      <includepath>${KDIR}/include/generated/uapi</includepath>
+    </language>
+  </section>
+  <section name="org.eclipse.cdt.internal.ui.wizards.settingswizards.Macros">
+    <language id="org.eclipse.cdt.core.gcc" name="C Source File">
+      <macro>
+        <name>__KERNEL__</name>
+        <value>1</value>
+      </macro>
+      <macro>
+        <name>MODULE</name>
+        <value/>
+      </macro>
+      <macro>
+        <name>KBUILD_MODNAME</name>
+        <value>"xeno_spkr"</value>
+      </macro>
+    </language>
+    <language name="Object File"/>
+    <language id="org.eclipse.cdt.core.assembly" name="Assembly Source File"/>
+  </section>
+</cdtprojectproperties>
