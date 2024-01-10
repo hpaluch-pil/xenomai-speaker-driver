@@ -3,11 +3,10 @@
 Example PC Speaker RDTM driver for Xenomai.
 
 Status:
-- early work that does something.
-- it sets decreasing pitch (frequency) of PC speaker every 0.5s for 20 seconds in total
+- it works: kernel driver will beep on PC speaker and toggle it on/off
 - kernel module in [spkr-kernel-module/](spkr-kernel-module/) creates RTDM Device `/dev/rtdm/xenospkr0`
-- when device is open, speaker will beep on/off every second
-- you can open device with app in [spkr-app/](spkr-app/) folder. It will open device and
+- you can open that device with app in [spkr-app/](spkr-app/) folder (only Xenomai apps are allowed
+  to access device in RT mode). It will open device and
   - sets pitch (beep frequency) decreasing every 0.5 s, default speaker toggle rate 1s
   - after 10 seconds reduce toggle rate to 0.5s and sleeps 2 seconds.
 
