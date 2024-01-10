@@ -8,8 +8,8 @@ Status:
 - kernel module in [spkr-kernel-module/](spkr-kernel-module/) creates RTDM Device `/dev/rtdm/xenospkr0`
 - when device is open, speaker will beep on/off every second
 - you can open device with app in [spkr-app/](spkr-app/) folder. It will open device and
-  - sets pitch (beep frequency) decreasing every 0.5 s
-  - kernel driver will toggle speaker on/off every 1 second (currently hardcoded)
+  - sets pitch (beep frequency) decreasing every 0.5 s, default speaker toggle rate 1s
+  - after 10 seconds reduce toggle rate to 0.5s and sleeps 2 seconds.
 
 Tested version:
 - Intel ECI 3.1: https://eci.intel.com/downloads/release-eci_3.1.zip

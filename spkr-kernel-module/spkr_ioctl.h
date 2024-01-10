@@ -19,5 +19,8 @@
 #define SPKR_RTIOC_SET_PITCH \
         _IOW(RTIOC_TYPE_SPKR, 0x10, unsigned int)
 
+#define SPKR_RTIOC_SET_TOGGLE_RATE \
+        _IOW(RTIOC_TYPE_SPKR, 0x20, unsigned long)
+
 
 #endif /* SPKR_IOCTL_H_ */

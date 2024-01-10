@@ -31,7 +31,6 @@ MODULE_LICENSE("GPL");
 #define prx_info(fmt,...) rtdm_printk(SPKR_PREFIX  "..... %s:%d: " fmt "\n", __func__, __LINE__, ##__VA_ARGS__)
 #define prx_err(fmt,...) rtdm_printk(SPKR_PREFIX   "ERROR at %s:%d: " fmt "\n", __func__, __LINE__, ##__VA_ARGS__)
 
-
 #define SPKR_PROFILE_VER 1
 
 struct spkr {
@@ -42,9 +41,9 @@ struct spkr_priv {
 	rtdm_timer_t base_timer;
 	unsigned char spkr_data;
 	unsigned int configured;
-	unsigned long period;
+	unsigned long period; // speaker toggle (on/off) rate in [ns]
 	unsigned long ticks;
-	unsigned int count;
+	unsigned int count; // speaker Pitch (beep frequency) i8254 counter value
 };
 
 
@@ -85,6 +84,19 @@ static void spkr_setpitch(struct spkr_priv *ctx)
     prx_info("Speaker pitch set to count=%u (%u [Hz]) ", ctx->count, SPKR_PITCH_XTAL / div32);
 }
 
+static int spkr_start_toggle_timer(struct spkr_priv *ctx)
+{
+	int ret = 0;
+
+	ret = rtdm_timer_start(&ctx->base_timer, ctx->period, ctx->period,
+			 RTDM_TIMERMODE_RELATIVE);
+	if (ret < 0){
+		prx_err("rtdm_timer_start: period=%lu failed with err=%d", ctx->period, ret);
+	}
+	prx_info("Set speaker toggle rate to %lu [ns]", ctx->period);
+	return ret;
+}
+
 static int spkr_open(struct rtdm_fd *fd, int oflags)
 {
 	int ret = 0;
@@ -106,8 +118,7 @@ static int spkr_open(struct rtdm_fd *fd, int oflags)
 
 	spkr_setpitch(ctx);
 
-	ret = rtdm_timer_start(&ctx->base_timer, ctx->period, ctx->period,
-			 RTDM_TIMERMODE_RELATIVE);
+	ret = spkr_start_toggle_timer(ctx);
 	if (ret < 0){
 		prx_err("rtdm_timer_start: failed with err=%d", ret);
 		rtdm_timer_destroy(&ctx->base_timer);
@@ -142,6 +153,9 @@ static int spkr_ioctl_rt(struct rtdm_fd *fd, unsigned int request, void __user *
         	ctx->count = (unsigned)arg;
         	spkr_setpitch(ctx);
         	return 0;
+        case SPKR_RTIOC_SET_TOGGLE_RATE:
+        	ctx->period = (unsigned long)arg;
+        	return spkr_start_toggle_timer(ctx);
         default:
                 return -EINVAL;
         }

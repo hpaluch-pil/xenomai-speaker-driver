@@ -22,6 +22,8 @@
 // slee 0.5 s
 #define SLEEP_US 500000
 
+#define TOGGLE_RATE_NS 500000000UL
+
 int main(int argc, char **argv)
 {
 	int fd, ret = 1,tmp = 0;
@@ -42,12 +44,26 @@ int main(int argc, char **argv)
 			printf("ERROR: ioctl %s SPKR_RTIOC_SET_PITCH (err=%d: %s)\n", DEVICE_NAME, ret, strerror(-ret));
 			goto exit1;
 		}
-		printf("Sleeping for %d [us]...\n", SLEEP_US);
+		printf("Sleeping for %d [us], Pitch %d ...\n", SLEEP_US, pitch);
 		ret = usleep(SLEEP_US);
 		if (ret < 0){
 			printf("ERROR: usleep(%d) (err=%d: %s)\n", SLEEP_US, ret, strerror(-ret));
 			goto exit1;
 		}
+	}
+	// try increased toggle rate
+	ret = ioctl(fd, SPKR_RTIOC_SET_TOGGLE_RATE, TOGGLE_RATE_NS );
+	if (ret < 0){
+		printf("ERROR: ioctl %s SPKR_RTIOC_SET_TOGGLE_RATE (err=%d: %s)\n", DEVICE_NAME, ret, strerror(-ret));
+		goto exit1;
+	}
+	printf("Toggle rate changed to %lu [ns]\n", TOGGLE_RATE_NS);
+	// and wait 2 seconds
+	printf("Sleeping 2 seconds...\n");
+	ret = sleep(2);
+	if (ret < 0){
+		printf("ERROR: sleep(%d) (err=%d: %s)\n", 2, ret, strerror(-ret));
+		goto exit1;
 	}
 
 	ret = 0;
