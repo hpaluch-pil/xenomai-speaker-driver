@@ -73,7 +73,7 @@ dmesg
 
 # Credits
 
-Following projects (and many others were used) to create this example:
+Following projects (and many others) were used to create this example:
 
 - https://github.com/andreynech/rtdm-pwm
 - Various parts from Xenomai source, mostly:
