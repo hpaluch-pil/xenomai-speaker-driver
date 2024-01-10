@@ -18,6 +18,8 @@
 #include <rtdm/driver.h>
 #include <rtdm/rtdm.h>
 
+#include "spkr_ioctl.h"
+
 MODULE_AUTHOR("Henryk Paluch <henryk.paluch@pickering.cz>");
 MODULE_DESCRIPTION("RDTM PC Speaker driver");
 MODULE_VERSION("0.0.1");
@@ -25,8 +27,9 @@ MODULE_LICENSE("GPL");
 
 
 #define SPKR_PREFIX "SPKR "
-#define prx_debug(fmt,...) rtdm_printk(SPKR_PREFIX "%s:%d: " fmt "\n", __func__, __LINE__, ##__VA_ARGS__)
-#define prx_err(fmt,...) rtdm_printk(SPKR_PREFIX "ERROR at %s:%d: " fmt "\n", __func__, __LINE__, ##__VA_ARGS__)
+#define prx_debug(fmt,...) rtdm_printk(SPKR_PREFIX "DEBUG %s:%d: " fmt "\n", __func__, __LINE__, ##__VA_ARGS__)
+#define prx_info(fmt,...) rtdm_printk(SPKR_PREFIX  "..... %s:%d: " fmt "\n", __func__, __LINE__, ##__VA_ARGS__)
+#define prx_err(fmt,...) rtdm_printk(SPKR_PREFIX   "ERROR at %s:%d: " fmt "\n", __func__, __LINE__, ##__VA_ARGS__)
 
 
 #define SPKR_PROFILE_VER 1
@@ -66,6 +69,22 @@ static void spkr_handle_base_timer(rtdm_timer_t *timer)
 	prx_debug("Timer tick #%lu, speaker is %s", ctx->ticks, ctx->spkr_data ? "ON" : "OFF" );
 }
 
+// set speaker pitch (frequency of beep)
+static void spkr_setpitch(struct spkr_priv *ctx)
+{
+	// TODO: Refuse ctx->count > 65535 (overflow)
+	unsigned div32 = ctx->count;
+	if (div32 == 0){
+		div32 = 65536; // i8254 works that way.
+	}
+    /* set command for counter 2, 2 byte write */
+    outb_p(0xB6, 0x43);
+    /* select desired HZ */
+    outb_p(ctx->count & 0xff, 0x42);
+    outb((ctx->count >> 8) & 0xff, 0x42);
+    prx_info("Speaker pitch set to count=%u (%u [Hz]) ", ctx->count, SPKR_PITCH_XTAL / div32);
+}
+
 static int spkr_open(struct rtdm_fd *fd, int oflags)
 {
 	int ret = 0;
@@ -85,6 +104,8 @@ static int spkr_open(struct rtdm_fd *fd, int oflags)
 		goto exit1;
 	}
 
+	spkr_setpitch(ctx);
+
 	ret = rtdm_timer_start(&ctx->base_timer, ctx->period, ctx->period,
 			 RTDM_TIMERMODE_RELATIVE);
 	if (ret < 0){
@@ -92,12 +113,6 @@ static int spkr_open(struct rtdm_fd *fd, int oflags)
 		rtdm_timer_destroy(&ctx->base_timer);
 		goto exit1;
 	}
-
-    /* set command for counter 2, 2 byte write */
-    outb_p(0xB6, 0x43);
-    /* select desired HZ */
-    outb_p(ctx->count & 0xff, 0x42);
-    outb((ctx->count >> 8) & 0xff, 0x42);
 
 	ctx->configured = 1;
 exit1:
@@ -118,6 +133,21 @@ static void spkr_close(struct rtdm_fd *fd)
     outb(inb_p(0x61) & 0xFC, 0x61);
 }
 
+static int spkr_ioctl_rt(struct rtdm_fd *fd, unsigned int request, void __user *arg)
+{
+        struct spkr_priv *ctx = rtdm_fd_to_private(fd);
+
+        switch (request) {
+        case SPKR_RTIOC_SET_PITCH:
+        	ctx->count = (unsigned)arg;
+        	spkr_setpitch(ctx);
+        	return 0;
+        default:
+                return -EINVAL;
+        }
+        return 0;
+}
+
 
 static struct rtdm_driver spkr_driver = {
 	.profile_info           = RTDM_PROFILE_INFO(xenospkr,
@@ -130,7 +160,7 @@ static struct rtdm_driver spkr_driver = {
 	.ops = {
 		.open		= spkr_open,
 		.close		= spkr_close,
-		//.ioctl_rt	= gpiopwm_ioctl_rt,
+		.ioctl_rt	= spkr_ioctl_rt,
 		//.ioctl_nrt	= gpiopwm_ioctl_nrt,
 	},
 };

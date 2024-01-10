@@ -4,11 +4,13 @@
     <language id="org.eclipse.cdt.core.gcc" name="C Source File">
       <includepath>/usr/include/xenomai/cobalt</includepath>
       <includepath>/usr/include/xenomai</includepath>
+      <includepath>${ProjDirPath}/../spkr-kernel-module</includepath>
     </language>
     <language name="Object File"/>
     <language id="org.eclipse.cdt.core.assembly" name="Assembly Source File">
       <includepath>/usr/include/xenomai/cobalt</includepath>
       <includepath>/usr/include/xenomai</includepath>
+      <includepath>${ProjDirPath}/../spkr-kernel-module</includepath>
     </language>
   </section>
   <section name="org.eclipse.cdt.internal.ui.wizards.settingswizards.Macros">

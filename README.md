@@ -4,11 +4,12 @@ Example PC Speaker RDTM driver for Xenomai.
 
 Status:
 - early work that does something.
+- it sets decreasing pitch (frequency) of PC speaker every 0.5s for 20 seconds in total
 - kernel module in [spkr-kernel-module/](spkr-kernel-module/) creates RTDM Device `/dev/rtdm/xenospkr0`
 - when device is open, speaker will beep on/off every second
-- you can open device with app in [xeno-app/](xeno-app/) folder. It will open device
-  (speaker start beeping on/off with toggle rate 1s) as long as app will sleep with device open (10s).
-  Once app closes device speaker will be permanently off.
+- you can open device with app in [xeno-app/](xeno-app/) folder. It will open device and
+  - sets pitch (beep frequency) decreasing every 0.5 s
+  - kernel driver will toggle speaker on/off every 1 second (currently hardcoded)
 
 Tested version:
 - Intel ECI 3.1: https://eci.intel.com/downloads/release-eci_3.1.zip

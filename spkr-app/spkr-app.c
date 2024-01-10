@@ -15,13 +15,18 @@
 #include <rtdm/rtdm.h>
 #include <xenomai/version.h>
 
+#include "spkr_ioctl.h"
+
 #define DEVICE_NAME "/dev/rtdm/xenospkr0"
 
-#define SLEEP_S 10 
+// slee 0.5 s
+#define SLEEP_US 500000
 
 int main(int argc, char **argv)
 {
 	int fd, ret = 1,tmp = 0;
+	int i;
+	int pitch = 1000;
 
 	rt_printf("Xenomai build Runtime Version: %s!\n", XENO_VERSION_STRING);
 	fd = open(DEVICE_NAME, O_RDWR);
@@ -29,11 +34,20 @@ int main(int argc, char **argv)
 		printf("ERROR: open %s (err=%d: %s)\n", DEVICE_NAME, fd, strerror(-fd));
 		goto exit0;
 	}
-	printf("Sleeping for %d [s]...\n", SLEEP_S);
-	ret = sleep(SLEEP_S);
-	if (ret < 0){
-		printf("ERROR: sleep(%d) (err=%d: %s)\n", SLEEP_S, ret, strerror(-ret));
-		goto exit1;
+
+	for(i=0;i<20;i++){
+		pitch += 100;
+		ret = ioctl(fd, SPKR_RTIOC_SET_PITCH, pitch );
+		if (ret < 0){
+			printf("ERROR: ioctl %s SPKR_RTIOC_SET_PITCH (err=%d: %s)\n", DEVICE_NAME, ret, strerror(-ret));
+			goto exit1;
+		}
+		printf("Sleeping for %d [us]...\n", SLEEP_US);
+		ret = usleep(SLEEP_US);
+		if (ret < 0){
+			printf("ERROR: usleep(%d) (err=%d: %s)\n", SLEEP_US, ret, strerror(-ret));
+			goto exit1;
+		}
 	}
 
 	ret = 0;
