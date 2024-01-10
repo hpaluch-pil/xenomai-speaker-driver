@@ -7,7 +7,7 @@ Status:
 - it sets decreasing pitch (frequency) of PC speaker every 0.5s for 20 seconds in total
 - kernel module in [spkr-kernel-module/](spkr-kernel-module/) creates RTDM Device `/dev/rtdm/xenospkr0`
 - when device is open, speaker will beep on/off every second
-- you can open device with app in [xeno-app/](xeno-app/) folder. It will open device and
+- you can open device with app in [spkr-app/](spkr-app/) folder. It will open device and
   - sets pitch (beep frequency) decreasing every 0.5 s
   - kernel driver will toggle speaker on/off every 1 second (currently hardcoded)
 
