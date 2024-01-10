@@ -10,6 +10,7 @@
  *
  */
 
+#include <linux/kernel.h>
 #include <linux/slab.h>
 #include <linux/gpio.h>
 #include <linux/module.h>

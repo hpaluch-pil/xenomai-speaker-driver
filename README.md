@@ -4,7 +4,7 @@ Example PC Speaker RDTM driver for Xenomai.
 
 Status:
 - early work that does something.
-- kernel module in [kernel-module/](kernel-module/) creates RTDM Device `/dev/rtdm/xenospkr0`
+- kernel module in [spkr-kernel-module/](spkr-kernel-module/) creates RTDM Device `/dev/rtdm/xenospkr0`
 - when device is open, speaker will beep on/off every second
 - you can open device with app in [xeno-app/](xeno-app/) folder. It will open device
   (speaker start beeping on/off with toggle rate 1s) as long as app will sleep with device open (10s).
@@ -45,7 +45,7 @@ Details:
 
 Building this project:
 ```shell
-cd kernel-module && make
+cd spkr-kernel-module && make
 ```
 Running:
 ```shell
